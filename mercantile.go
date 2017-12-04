@@ -89,3 +89,14 @@ func Children(tile TileID) []TileID {
 
     return []TileID{a, b, c, d}
 }
+
+func Center(tileid TileID) []float64 {  
+    bds := Bounds(tileid)
+    return []float64{(bds.W + bds.E) / 2.0,(bds.N + bds.S) / 2.0}
+}
+
+func Parent(tileid TileID) TileID {
+    center := Center(tileid)
+    return Tile(center[0],center[1],int(tileid.Z)-1)
+}
+

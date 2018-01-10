@@ -1,9 +1,12 @@
 # Mercantile - Simple Conversion of points to tile x,y,z.
 
+[![GoDoc](https://godoc.org/github.com/murphy214/mercantile?status.svg)](https://godoc.org/github.com/murphy214/mercantile)
+
 This project is a [port](https://github.com/mapbox/mercantile
 ) from a mercantile implementation in python.
 
-[![GoDoc](https://godoc.org/github.com/murphy214/mercantile?status.svg)](https://godoc.org/github.com/murphy214/mercantile)
+
+
 # Usage 
  ```
  package main

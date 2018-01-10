@@ -3,8 +3,7 @@
 This project is a [port](https://github.com/mapbox/mercantile
 ) from a mercantile implementation in python.
 
-[![godoc reference](godoc.png)](https://godoc.org/github.com/murphy214/mercantile)
-
+[![GoDoc](https://godoc.org/github.com/murphy214/mercantile?status.svg)](https://godoc.org/github.com/murphy214/mercantile)
 # Usage 
  ```
  package main

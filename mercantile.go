@@ -7,7 +7,7 @@ import (
     "strings"
 )
 
-// extrema structure (Bounding Box)
+// Extrema structure (Bounding Box)
 type Extrema struct {
     W float64
     E float64
@@ -28,7 +28,7 @@ type Point struct {
     Y float64
 }
 
-//Returns the upper left (lon, lat) of a tile
+// Returns the upper left (lon, lat) of a tile.
 func Ul(tileid TileID) Point {
     n := math.Pow(2.0, float64(tileid.Z))
     lon_deg := float64(tileid.X)/n*360.0 - 180.0
@@ -38,14 +38,14 @@ func Ul(tileid TileID) Point {
 }
 
 
-//Returns the (lon, lat) bounding box of a tile
+//Returns the (lon, lat) bounding box of a tile.
 func Bounds(tileid TileID) Extrema {
     a := Ul(tileid)
     b := Ul(TileID{tileid.X + 1, tileid.Y + 1, tileid.Z})
     return Extrema{W: a.X, S: b.Y, E: b.X, N: a.Y}
 }
 
-// Returns the (x, y, z) tile
+// Returns the (x, y, z) tile.
 func Tile(lng float64, lat float64, zoom int) TileID {
 
     lat = lat * (math.Pi / 180.0)
@@ -84,7 +84,7 @@ func Strtile(tileid string) TileID {
     return TileID{int64(x), int64(y), uint64(z)}
 }
 
-// gets the children of a given child id
+// Returns gets the children of a given child id.
 func Children(tile TileID) []TileID {
     a := TileID{tile.X * 2, tile.Y * 2, tile.Z + 1}
     b := TileID{tile.X*2 + 1, tile.Y * 2, tile.Z + 1}
@@ -94,13 +94,13 @@ func Children(tile TileID) []TileID {
     return []TileID{a, b, c, d}
 }
 
-// gets the center of a given tileid
+// Returns the center of a given tileid.
 func Center(tileid TileID) []float64 {  
     bds := Bounds(tileid)
     return []float64{(bds.W + bds.E) / 2.0,(bds.N + bds.S) / 2.0}
 }
 
-// gets the parent of a tileid
+// Returns the parent of a given tileid.
 func Parent(tileid TileID) TileID {
     center := Center(tileid)
     return Tile(center[0],center[1],int(tileid.Z)-1)

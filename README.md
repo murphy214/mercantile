@@ -8,7 +8,7 @@ This project is a [port](https://github.com/mapbox/mercantile
 
 
 # Usage 
- ```
+ ```golang
  package main
 
 import m "github.com/murphy214/mercantile"

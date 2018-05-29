@@ -110,3 +110,25 @@ func TilestrFile(tileid TileID) string {
 	strval := fmt.Sprintf("%s-%s-%s", strconv.Itoa(int(tileid.X)), strconv.Itoa(int(tileid.Y)), strconv.Itoa(int(tileid.Z)))
 	return strval
 }
+
+// this function handles one of the many formats tilestr can be in
+// basically every delimitter that could be withina  raw text tileid XYZ
+func TileFromString(val string) TileID {
+	var vals []string
+	if strings.Contains(val, "-") {
+		vals = strings.Split(val, "-")
+	} else if strings.Contains(val, "/") {
+		vals = strings.Split(val, "/")
+	} else if strings.Contains(val, "_") {
+		vals = strings.Split(val, "_")
+	} else if strings.Contains(val, ",") {
+		vals = strings.Split(val, ",")
+	} else if strings.Contains(val, " ") {
+		vals = strings.Split(val, " ")
+	}
+
+	x, _ := strconv.ParseInt(vals[0], 0, 64)
+	y, _ := strconv.ParseInt(vals[1], 0, 64)
+	z, _ := strconv.ParseInt(vals[2], 0, 64)
+	return TileID{int64(x), int64(y), uint64(z)}
+}

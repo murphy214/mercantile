@@ -132,3 +132,18 @@ func TileFromString(val string) TileID {
 	z, _ := strconv.ParseInt(vals[2], 0, 64)
 	return TileID{int64(x), int64(y), uint64(z)}
 }
+
+// returns a polygon from a given tile
+func PolygonTile(tileid TileID) [][][]float64 {
+	bds := Bounds(tileid)
+	return [][][]float64{
+		{
+			{bds.E, bds.N},
+			{bds.E, bds.S},
+			{bds.W, bds.S},
+			{bds.W, bds.N},
+			{bds.E, bds.N},
+		},
+	}
+
+}

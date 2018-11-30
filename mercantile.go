@@ -147,3 +147,10 @@ func PolygonTile(tileid TileID) [][][]float64 {
 	}
 
 }
+
+// checks to see if two tiles are equal
+func IsEqual(t1,t2 TileID) bool {
+	return int(t1.X) == int(t2.X) && int(t1.Y) == int(t2.Y) && int(t1.Z) == int(t2.Z)
+}
+
+

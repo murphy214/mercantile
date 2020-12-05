@@ -77,13 +77,21 @@ func Strtile(tileid string) TileID {
 	return TileID{int64(x), int64(y), uint64(z)}
 }
 
-// Returns gets the children of a given child id.
-func Children(tile TileID) []TileID {
-	a := TileID{tile.X * 2, tile.Y * 2, tile.Z + 1}
-	b := TileID{tile.X*2 + 1, tile.Y * 2, tile.Z + 1}
-	c := TileID{tile.X*2 + 1, tile.Y*2 + 1, tile.Z + 1}
-	d := TileID{tile.X * 2, tile.Y*2 + 1, tile.Z + 1}
-	return []TileID{a, b, c, d}
+// Returns gets the children of a given TileID
+// Children are ordered: top-left, top-right, bottom-right, bottom-left
+func Children(tile TileID, zoom uint64) []TileID {
+
+	tiles := []TileID{tile}
+
+	for tiles[0].Z < zoom {
+		tile, tiles = tiles[0], tiles[1:]
+
+		tiles = append(tiles, TileID{tile.X * 2, tile.Y * 2, tile.Z + 1},
+			TileID{tile.X*2 + 1, tile.Y * 2, tile.Z + 1},
+			TileID{tile.X*2 + 1, tile.Y*2 + 1, tile.Z + 1},
+			TileID{tile.X * 2, tile.Y*2 + 1, tile.Z + 1})
+	}
+	return tiles
 }
 
 // Returns the center of a given tileid.
@@ -143,30 +151,30 @@ func PolygonTile(tileid TileID) [][][]float64 {
 }
 
 // checks to see if two tiles are equal
-func IsEqual(t1,t2 TileID) bool {
+func IsEqual(t1, t2 TileID) bool {
 	return int(t1.X) == int(t2.X) && int(t1.Y) == int(t2.Y) && int(t1.Z) == int(t2.Z)
 }
 
 // reverses a string
 func reverse(val string) string {
 	newval := []byte(val)
-	for i,char := range []byte(val) {
+	for i, char := range []byte(val) {
 		newval[len(val)-i-1] = byte(char)
 	}
 	return string(newval)
 }
 
-// tile id to quadkey 
-// copied from python mercantile library 
+// tile id to quadkey
+// copied from python mercantile library
 func QuadKey(tileid TileID) string {
 	stringval := ""
 	for i := int(tileid.Z); i > 0; i-- {
 		digit := 0
-        mask := int(1 << uint64(i - 1))
-		if int(tileid.X) & mask > 0 {
+		mask := int(1 << uint64(i-1))
+		if int(tileid.X)&mask > 0 {
 			digit += 1
 		}
-		if int(tileid.Y) & mask  > 0 {
+		if int(tileid.Y)&mask > 0 {
 			digit += 2
 		}
 		stringval += strconv.Itoa(digit)
@@ -175,12 +183,12 @@ func QuadKey(tileid TileID) string {
 }
 
 // takes a quadkey and converts it back to a tile value
-// copied from python mercantile library 
+// copied from python mercantile library
 func QuadkeyToTile(quadkey string) TileID {
 	quadkey = reverse(quadkey)
 	outeri := 0
-	xtile,ytile := 0,0
-	for pos,i := range quadkey {
+	xtile, ytile := 0, 0
+	for pos, i := range quadkey {
 		mask := 1 << uint64(pos)
 		switch string(i) {
 		case "1":
@@ -189,10 +197,9 @@ func QuadkeyToTile(quadkey string) TileID {
 			ytile = ytile | mask
 		case "3":
 			xtile = xtile | mask
-            ytile = ytile | mask
+			ytile = ytile | mask
 		}
 		outeri = pos
 	}
-	return TileID{X:int64(xtile),Y:int64(ytile),Z:uint64(outeri+1)}
+	return TileID{X: int64(xtile), Y: int64(ytile), Z: uint64(outeri + 1)}
 }
-
